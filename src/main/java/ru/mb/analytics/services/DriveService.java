@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -34,7 +35,7 @@ public class DriveService {
         }
     }
 
-    public com.google.api.services.drive.model.File createFileOnDrive(String nameFile) throws IOException {
+    public com.google.api.services.drive.model.File createFileOnDrive(String nameFile) throws IOException, InterruptedException {
         com.google.api.services.drive.model.File file = new com.google.api.services.drive.model.File();
         file.setName(nameFile);
         file.setMimeType("application/vnd.google-apps.spreadsheet");
@@ -48,6 +49,7 @@ public class DriveService {
                 break;
             } catch (IOException e) {
                 logger.error(e.getMessage());
+                TimeUnit.SECONDS.sleep(5);
                 stepOfTry++;
                 file = null;
             }
@@ -55,7 +57,7 @@ public class DriveService {
         return file;
     }
 
-    public Boolean addPermisionOnFile(com.google.api.services.drive.model.File file, String mail) throws IOException {
+    public Boolean addPermisionOnFile(com.google.api.services.drive.model.File file, String mail) throws IOException, InterruptedException {
         Permission userPermission = new Permission()
                 .setType("user")
                 .setRole("writer")
@@ -91,6 +93,7 @@ public class DriveService {
                 break;
             } catch (IOException e) {
                 logger.error(e.getMessage());
+                TimeUnit.SECONDS.sleep(5);
                 stepOfTry++;
             }
         }

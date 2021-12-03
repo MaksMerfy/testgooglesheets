@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -53,20 +54,29 @@ public class SheetService {
                 break;
             } catch (IOException e) {
                 logger.error(e.getMessage());
+                TimeUnit.SECONDS.sleep(5);
                 stepOfTry++;
             }
         }
         return resultForReturn;
     }
 
-    public Boolean writeToASingleRange(com.google.api.services.drive.model.File file, List arrayOfValue) throws IOException {
+    public boolean writeToASingleRange(com.google.api.services.drive.model.File file, List arrayOfValue) throws IOException, InterruptedException {
+        return writeToASingleRangeGoogle(file, arrayOfValue, "A1");
+    }
+
+    public boolean writeToASingleRange(com.google.api.services.drive.model.File file, List arrayOfValue, String range) throws IOException, InterruptedException {
+        return writeToASingleRangeGoogle(file, arrayOfValue, range);
+    }
+
+    private boolean writeToASingleRangeGoogle(com.google.api.services.drive.model.File file, List arrayOfValue, String range) throws IOException, InterruptedException {
         ValueRange body = new ValueRange()
                 .setValues(arrayOfValue);
         Sheets.Spreadsheets.Values.Update resultUpdate = googleSheetService.spreadsheets().values()
-                .update(file.getId(), "A1", body)
+                .update(file.getId(), range, body)
                 .setValueInputOption("RAW");
 
-        Boolean succes = false;
+        boolean succes = false;
 
         int stepOfTry = 0;
         while (stepOfTry < 5) {
@@ -76,6 +86,31 @@ public class SheetService {
                 break;
             } catch (IOException e) {
                 logger.error(e.getMessage());
+                TimeUnit.SECONDS.sleep(5);
+                stepOfTry++;
+            }
+        }
+
+        return succes;
+    }
+
+    public boolean writeToAMultipleRanges(com.google.api.services.drive.model.File file, ValueRange data) throws IOException, InterruptedException {
+
+        Sheets.Spreadsheets.Values.Append resultUpdate =
+                googleSheetService.spreadsheets().values()
+                        .append(file.getId(), "Sheet1", data)
+                        .setValueInputOption("RAW");
+        boolean succes = false;
+
+        int stepOfTry = 0;
+        while (stepOfTry < 5) {
+            try {
+                resultUpdate.execute();
+                succes = true;
+                break;
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+                TimeUnit.SECONDS.sleep(5);
                 stepOfTry++;
             }
         }
