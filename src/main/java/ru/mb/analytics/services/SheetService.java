@@ -4,14 +4,15 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.Spreadsheet;
-import com.google.api.services.sheets.v4.model.ValueRange;
+import com.google.api.services.sheets.v4.model.*;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -106,6 +107,63 @@ public class SheetService {
         while (stepOfTry < 5) {
             try {
                 resultUpdate.execute();
+                succes = true;
+                break;
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+                TimeUnit.SECONDS.sleep(5);
+                stepOfTry++;
+            }
+        }
+
+        return succes;
+    }
+
+    public boolean tryFormatRanges(com.google.api.services.drive.model.File file,
+                                   int SheetID,
+                                   int StartRowIndex,
+                                   int EndRowIndex,
+                                   int StartColumnIndex,
+                                   int EndColumnIndex, Color color) throws IOException, InterruptedException {
+        List<GridRange> ranges = Collections.singletonList(new GridRange()
+                .setSheetId(SheetID)
+                .setStartRowIndex(StartRowIndex)
+                .setEndRowIndex(EndRowIndex)
+                .setStartColumnIndex(StartColumnIndex)
+                .setEndColumnIndex(EndColumnIndex)
+        );
+        List<Request> requests = Arrays.asList(
+                new Request().setAddConditionalFormatRule(new AddConditionalFormatRuleRequest()
+                        .setRule(new ConditionalFormatRule()
+                                .setRanges(ranges)
+                                .setBooleanRule(new BooleanRule()
+                                        .setCondition(new BooleanCondition()
+                                                .setType("CUSTOM_FORMULA")
+                                                .setValues(Collections.singletonList(
+                                                        new ConditionValue().setUserEnteredValue(
+                                                                "=TRUE")
+                                                ))
+                                        )
+                                        .setFormat(new CellFormat().setTextFormat(
+                                                new TextFormat().setForegroundColor(
+                                                        color)
+                                        ))
+                                )
+                        )
+                        .setIndex(0)
+                )
+        );
+
+        BatchUpdateSpreadsheetRequest body = new BatchUpdateSpreadsheetRequest()
+                .setRequests(requests);
+        Sheets.Spreadsheets.BatchUpdate result = googleSheetService.spreadsheets()
+                .batchUpdate(file.getId(), body);
+        boolean succes = false;
+
+        int stepOfTry = 0;
+        while (stepOfTry < 5) {
+            try {
+                result.execute();
                 succes = true;
                 break;
             } catch (IOException e) {

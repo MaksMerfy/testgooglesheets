@@ -1,6 +1,7 @@
 package ru.mb.analytics.services;
 
 import com.google.api.services.drive.model.File;
+import com.google.api.services.sheets.v4.model.Color;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import ru.mb.analytics.repository.AccountRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -61,6 +61,15 @@ public class AccountService {
                     .setValues(values);
 
             succes = sheetService.writeToAMultipleRanges(file, body);
+            if (succes == false) return returnedId;
+
+            succes = sheetService.tryFormatRanges(file,
+                    0,
+                    2,
+                    6,
+                    1,
+                    2,
+                    new Color().setRed(0.8f));
             if (succes == false) return returnedId;
 
             returnedId = "https://docs.google.com/spreadsheets/d/" + file.getId() + "/edit";
