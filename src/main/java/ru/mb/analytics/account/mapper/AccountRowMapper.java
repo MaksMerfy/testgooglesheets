@@ -1,7 +1,7 @@
-package ru.mb.analytics.mapper;
+package ru.mb.analytics.account.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
-import ru.mb.analytics.entity.Account;
+import ru.mb.analytics.account.entity.Account;
 import ru.mb.analytics.entity.Proxy;
 import ru.mb.analytics.entity.Thematic;
 

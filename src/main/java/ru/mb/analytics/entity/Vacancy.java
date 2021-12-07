@@ -3,6 +3,7 @@ package ru.mb.analytics.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import ru.mb.analytics.account.entity.Account;
 
 import java.time.LocalDateTime;
 import java.util.List;

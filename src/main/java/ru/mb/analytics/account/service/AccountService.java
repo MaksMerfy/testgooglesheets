@@ -1,4 +1,4 @@
-package ru.mb.analytics.services;
+package ru.mb.analytics.account.service;
 
 import com.google.api.services.drive.model.File;
 import com.google.api.services.sheets.v4.model.Color;
@@ -7,8 +7,10 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mb.analytics.entity.Account;
-import ru.mb.analytics.repository.AccountRepository;
+import ru.mb.analytics.account.entity.Account;
+import ru.mb.analytics.account.repository.AccountRepository;
+import ru.mb.analytics.google.service.DriveService;
+import ru.mb.analytics.google.service.SheetService;
 
 import java.io.IOException;
 import java.util.ArrayList;

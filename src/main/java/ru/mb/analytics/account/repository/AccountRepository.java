@@ -1,10 +1,10 @@
-package ru.mb.analytics.repository;
+package ru.mb.analytics.account.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.mb.analytics.entity.Account;
-import ru.mb.analytics.mapper.AccountRowMapper;
+import ru.mb.analytics.account.entity.Account;
+import ru.mb.analytics.account.mapper.AccountRowMapper;
 
 import java.util.List;
 

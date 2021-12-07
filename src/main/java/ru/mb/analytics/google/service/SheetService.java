@@ -1,13 +1,13 @@
-package ru.mb.analytics.services;
+package ru.mb.analytics.google.service;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.*;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.mb.analytics.google.service.GoogleService;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -36,8 +36,7 @@ public class SheetService {
         }
     }
 
-    @SneakyThrows
-    public Spreadsheet createExampleSheet(com.google.api.services.drive.model.File file) throws IOException {
+    public Spreadsheet createExampleSheet(com.google.api.services.drive.model.File file) throws IOException, InterruptedException {
         Spreadsheet result = googleSheetService
                 .spreadsheets()
                 .get(file.getId()).execute();

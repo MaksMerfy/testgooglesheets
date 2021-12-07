@@ -1,8 +1,11 @@
-package ru.mb.analytics.entity;
+package ru.mb.analytics.account.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import ru.mb.analytics.entity.Proxy;
+import ru.mb.analytics.entity.Thematic;
+import ru.mb.analytics.entity.Vacancy;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,13 +1,12 @@
-package ru.mb.analytics.controllers.impl;
+package ru.mb.analytics.maintest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mb.analytics.controllers.MainTestRestController;
-import ru.mb.analytics.services.AccountService;
+import ru.mb.analytics.account.service.AccountService;
 
 
 @RestController
-public class MainRestController implements MainTestRestController {
+public class MainTestControllerImpl implements MainTestController {
    @Autowired
    private AccountService accountService;
 

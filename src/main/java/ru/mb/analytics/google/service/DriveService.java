@@ -1,4 +1,4 @@
-package ru.mb.analytics.services;
+package ru.mb.analytics.google.service;
 
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;

@@ -1,4 +1,4 @@
-package ru.mb.analytics.services;
+package ru.mb.analytics.google.service;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
